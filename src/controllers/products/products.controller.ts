@@ -1,5 +1,18 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  Body,
+  Put,
+  Delete,
+  HttpStatus,
+  HttpCode,
+  Res,
+} from '@nestjs/common';
 
+import { Response } from 'express';
 @Controller('products')
 export class ProductsController {
   @Get('')
@@ -19,7 +32,29 @@ export class ProductsController {
   }
 
   @Get(':id')
-  getProductById(@Param('id') id: string) {
-    return `Este es el producto encontrado con id: ${id}`;
+  @HttpCode(HttpStatus.ACCEPTED)
+  getProductById(@Res() response: Response, @Param('id') id: string) {
+    response.status(200).send({
+      message: `Este es el producto encontrado con id: ${id}`,
+    });
+  }
+
+  @Post()
+  create(@Body() product: any) {
+    console.log(product);
+    return { message: 'Producto creado correctamente', product };
+  }
+
+  @Put(':id')
+  update(@Param('id') id: string, @Body() payload: any) {
+    return {
+      message: `Producto actualizado correctamente correspondiente al ID ${id}`,
+      payload,
+    };
+  }
+
+  @Delete(':id')
+  delete(@Param('id') id: string) {
+    return { message: 'Producto eliminado correctamente', id };
   }
 }
