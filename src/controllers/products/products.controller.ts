@@ -13,11 +13,18 @@ import {
 } from '@nestjs/common';
 
 import { Response } from 'express';
+
+import { ProductsService } from '../../services/products/products.service';
 @Controller('products')
 export class ProductsController {
-  @Get('')
+  constructor(private productsService: ProductsService) {}
+
+  @Get()
   getAllProducts() {
-    return 'Estos son los productos';
+    return {
+      message: 'Estos son los productos',
+      data: this.productsService.findAll(),
+    };
   }
   @Get('filter')
   filtrandoProductos(
@@ -36,17 +43,21 @@ export class ProductsController {
   getProductById(@Res() response: Response, @Param('id') id: string) {
     response.status(200).send({
       message: `Este es el producto encontrado con id: ${id}`,
+      data: this.productsService.findOne(+id),
     });
   }
 
   @Post()
-  create(@Body() product: any) {
-    console.log(product);
-    return { message: 'Producto creado correctamente', product };
+  create(@Body() payload: any) {
+    return {
+      message: 'Producto creado correctamente',
+      payload: this.productsService.create(payload),
+    };
   }
 
   @Put(':id')
   update(@Param('id') id: string, @Body() payload: any) {
+    this.productsService.update(+id, payload);
     return {
       message: `Producto actualizado correctamente correspondiente al ID ${id}`,
       payload,
@@ -55,6 +66,9 @@ export class ProductsController {
 
   @Delete(':id')
   delete(@Param('id') id: string) {
-    return { message: 'Producto eliminado correctamente', id };
+    return {
+      message: 'Producto eliminado correctamente',
+      data: this.productsService.remove(+id),
+    };
   }
 }
