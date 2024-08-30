@@ -15,6 +15,7 @@ import {
 
 import { Response } from 'express';
 import { ParseIntPipe } from '../../common/parse-int/parse-int.pipe';
+import { CreateProductDto, UpdateeProductDto } from '../../dtos/products.dtos';
 
 import { ProductsService } from '../../services/products/products.service';
 @Controller('products')
@@ -53,7 +54,7 @@ export class ProductsController {
   }
 
   @Post()
-  create(@Body() payload: any) {
+  create(@Body() payload: CreateProductDto) {
     return {
       message: 'Producto creado correctamente',
       payload: this.productsService.create(payload),
@@ -61,7 +62,7 @@ export class ProductsController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() payload: any) {
+  update(@Param('id') id: string, @Body() payload: UpdateeProductDto) {
     this.productsService.update(+id, payload);
     return {
       message: `Producto actualizado correctamente correspondiente al ID ${id}`,
