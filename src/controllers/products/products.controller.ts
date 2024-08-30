@@ -15,7 +15,7 @@ import {
 
 import { Response } from 'express';
 import { ParseIntPipe } from '../../common/parse-int/parse-int.pipe';
-import { CreateProductDto, UpdateeProductDto } from '../../dtos/products.dtos';
+import { CreateProductDto, UpdateProductDto } from '../../dtos/products.dtos';
 
 import { ProductsService } from '../../services/products/products.service';
 @Controller('products')
@@ -62,7 +62,7 @@ export class ProductsController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() payload: UpdateeProductDto) {
+  update(@Param('id') id: string, @Body() payload: UpdateProductDto) {
     this.productsService.update(+id, payload);
     return {
       message: `Producto actualizado correctamente correspondiente al ID ${id}`,
